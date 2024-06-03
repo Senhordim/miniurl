@@ -1,9 +1,17 @@
 require 'sinatra'
+require 'sequel'
 
 set :root,  File.dirname(__FILE__)
 set :views, Proc.new { File.join(root, 'app', 'views') }
 
-URI_REGEX = /\A(https|http):\/\/[\w\-]+(\.[a-zA-Z]{2,})(:[0-9]+)?(\/[^\/]*(\.[a-zA-Z]{2,})?)?\z/
+URI_REGEX = /\A(http|https):\/\/[^\s$.?#].[^\s]*\z/i
+
+DB = Sequel.connect('sqlite://miniurl.db')
+
+DB.create_table? :urls do
+  primary_key :id
+  String :url
+end
 
 get '/' do
   erb :index
@@ -23,6 +31,6 @@ post '/shorten' do
 end
 
 def url_valida?(url)
-  url_regex = /\A(http|https):\/\/[^\s$.?#].[^\s]*\z/i
+  url_regex = URI_REGEX
   !!(url =~ url_regex)
 end

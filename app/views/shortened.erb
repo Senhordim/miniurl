@@ -1,1 +1,2 @@
-<%= @shortened %>
+
+<a href='<%= "#{env['HTTP_REFERER']}#{@shortened}" %>' target="_blank"><%= "#{env['HTTP_REFERER']}#{@shortened}" %></a>
